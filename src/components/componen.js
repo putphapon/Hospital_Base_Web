@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { useNavigate, useLocation } from "react-router-dom";
+import { createContext } from "react"
+import { useNavigate } from "react-router-dom";
 
 // components
 import {
@@ -11,12 +11,13 @@ import {
 } from '@mui/material'
 
 export const baseUrlApi = "http://localhost:8000/api/"
+export const AuthContext = createContext('-1')
 
 export const Logout = () => {
 
     let navigate = useNavigate()
     let handleLogout = () => {
-        localStorage.removeItem("temitope");
+        localStorage.removeItem("token");
         navigate("/");
     }
 

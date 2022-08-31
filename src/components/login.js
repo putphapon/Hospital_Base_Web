@@ -41,7 +41,6 @@ const Login = () => {
         if (email === "" & password === "") {
         } 
         else {
-            // console.log( email, password )
 
             let data = {
                 username: email,
@@ -51,14 +50,14 @@ const Login = () => {
             axios.post(`${baseUrlApi}login`, data)
             .then((res) => {
 
-            // console.log("token", res.data)
-            if (res.data.message.type !== '-1') {
-                setToken(res.data.message)
+                if (res.data.message.type !== '-1') {
+                    setToken(res.data)
 
-                if (res.data.message.type === '0') {
-                    navigate("/dashboard", { state: { accessType: res.data.message.type}})
-                } else {
-                    navigate("/profile", { state: { accessType: res.data.message.type, id: res.data.message.id}})
+                    if (res.data.message.type === '0') {
+                        navigate("/dashboard", { state: { type: res.data.message.type}})
+                    }
+                    else {
+                        navigate("/profile", { state: { id: res.data.message.id, type: res.data.message.type}})
                     }
                 }
             })
@@ -78,12 +77,12 @@ const Login = () => {
 
 
             {/* Body */}
-            <Grid container direction="row" justifyContent="center" alignItems="flex-start">
+            <Grid container direction="row" justifyContent="center" alignItems="center">
                 <Grid item xs></Grid>
 
                 {
                     fetchToken() ? (
-                        <Grid item xs={6}>
+                        <Grid item xs={6} container direction="row" justifyContent="center" alignItems="center" spacing={2}>
                             <Typography variant="subtitle1" component="h3" style={{ textTransform: 'uppercase' }}>logged</Typography>
                             <Logout></Logout>
                         </Grid>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useNavigate, useLocation } from 'react-router-dom'
 import NumberFormat from "react-number-format";
 import axios from "axios";
@@ -6,13 +6,8 @@ import axios from "axios";
 import {
     Container,
     Grid,
-    Box,
     Typography,
-    FormControl,
-    TextField,
     Stack,
-    Button,
-    FormHelperText,
     Divider,
     IconButton,
     InputAdornment
@@ -22,7 +17,7 @@ import {
     baseUrlApi,
     Footer,
     CalBMI,
-    Logout
+    Logout,
 } from './componen'
 
 // icon
@@ -32,15 +27,13 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import "../App.css";
 
 import { 
-    DataGrid, 
-    GridToolbarQuickFilter
+    DataGrid
 } from '@mui/x-data-grid';
 
 const Dashboard = () => {
     
     let navigate = useNavigate()
-    let accessType = useLocation().state.accessType
-    // console.log('accessType : ', accessType)
+    let accesstype = useLocation().state.type
 
     let [rows, setRows] = useState([])
 
@@ -50,17 +43,16 @@ const Dashboard = () => {
 
     let handleSubmit = (event) => {
         let userId = event.target.id
-        // console.log("id : ", typeof userId)
 
         if (userId !== '') {
             if (window.confirm(`ต้องการลบ ${userId} จริงๆ`) === true) {
                 axios.delete(`${baseUrlApi}profile/${parseInt(userId)}/`)
-                .then(res => { 
-                    // console.log('res', res) 
+                .then(res => {  
                 
-                    axios.get(`${baseUrlApi}dashboard/`)
+                    axios.get(`${baseUrlApi}dashboard/`, {
+                        params: { type: accesstype }
+                    })
                     .then(res => { 
-                        // console.log("res", res.data)
                         setRows(res.data)
                     })
                 })
@@ -69,24 +61,13 @@ const Dashboard = () => {
     }
 
     // useState
-    let [pageSize, setPageSize] = useState(10);
-    const QuickSearchToolbar = () => {
-      return (
-        <Box
-          sx={{
-            p: 0.5,
-            pb: 0,
-          }}
-        >
-          <GridToolbarQuickFilter />
-        </Box>
-      );
-    }
+    let [pageSize, setPageSize] = useState(10)
 
     useEffect(()=> {
-        axios.get(`${baseUrlApi}dashboard/`)
+        axios.get(`${baseUrlApi}dashboard/`, {
+            params: { type: accesstype }
+        })
         .then(res => { 
-            // console.log("res", res.data)
             setRows(res.data)
         })
     },[])
@@ -108,7 +89,7 @@ const Dashboard = () => {
                         alignItems="stretch"
                         divider={<Divider orientation="vertical" flexItem />}
                         >
-                            <IconButton onClick={() => { navigate("/profile", { state: { accessType: accessType, id: params.row.id }}) }}> <EditIcon/> </IconButton>
+                            <IconButton onClick={() => { navigate("/profile", { state: { type: accesstype, id: params.row.id }}) }}> <EditIcon/> </IconButton>
                             <IconButton id={params.row.id} onClick={handleSubmit} onMouseDown={handleMouseDown}> <DeleteForeverIcon  id={params.row.id}/> </IconButton>
                         </Stack>
                     </>
@@ -198,7 +179,7 @@ const Dashboard = () => {
                         <Typography variant="h2" component="span"> Dashboard</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                        <Typography variant="subtitle1" component="span" style={{ fontFamily: "Noto Sans Thai, Roboto, sans-serif" }}>ประเภทผู้ใช้งาน {accessType === '0' ? 'แพทย์' : 'ผู้ป่วย'} </Typography>
+                        <Typography variant="subtitle1" component="span" style={{ fontFamily: "Noto Sans Thai, Roboto, sans-serif" }}>ประเภทผู้ใช้งาน {accesstype === '0' ? 'แพทย์' : 'ผู้ป่วย'} </Typography>
                         <Logout></Logout>
                     </Grid>
                     <Divider variant="fullWidth" style={{ padding: "10px 0" }}/>

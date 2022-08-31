@@ -7,12 +7,8 @@ import Login from "./components/login"
 import Register from "./components/register"
 import Dashboard from "./components/dashboard"
 import Profiles from "./components/profile"
-import { useState } from 'react'
 
 const Apps = () => {
-
-    // let accessType = '0' // '0' หมอ '1' คนไข้
-    // let [accessType, setAccessType] = useState('-1')
 
     return (
         <BrowserRouter>

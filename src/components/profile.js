@@ -20,8 +20,7 @@ import {
     baseUrlApi,
     Footer,
     CalBMI,
-    handleDateFormat,
-    Logout
+    Logout,
 } from './componen'
 
 // icon
@@ -29,21 +28,12 @@ import EditIcon from '@mui/icons-material/Edit'
 import EditOffIcon from '@mui/icons-material/EditOff'
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { style } from "@mui/system";
-
-
 
 const Profile = () => {
 
-    let accessType = useLocation().state.accessType
-    // console.log('accessType : ', accessType)
-    
     let navigate = useNavigate()
     let idPatient = useLocation().state.id
-    // console.log('id : ', idPatient)
+    let accesstype = useLocation().state.type
 
     let [height , setHeight] = useState('')
     let [showHeight, setShowHeight] = useState(true)
@@ -89,7 +79,7 @@ const Profile = () => {
     let [showPostcode, setShowPostcode] = useState(true)
 
     let handleEditHidden = (flag) => {
-        let show = flag === accessType? 'visible' : 'hidden'
+        let show = flag === accesstype? 'visible' : 'hidden'
         return show
     }
 
@@ -129,28 +119,10 @@ const Profile = () => {
 
     let handleSubmit = (event) => {
 
-        if (accessType === '0') {
-            // console.log(
-            //     'Doctor',
-            //     height,
-            //     weight,
-            //     pressure,
-            //     setBMI(CalBMI(height,weight))
-            // )
+        if (accesstype === '0') {
             setShowAllDoctor(true)
                 
-        } else if (accessType === '1') {
-            // console.log(
-            //     'Patient',
-            //     firstName,
-            //     lastName,
-            //     handleDateFormat(birthDate),
-            //     address,
-            //     district,
-            //     subdistrict,
-            //     province,
-            //     postcode
-            // )
+        } else if (accesstype === '1') {
             setShowAllPatient(true)
         }
 
@@ -167,11 +139,9 @@ const Profile = () => {
             weight: weight,
             pressure: pressure
         }
-        // console.log(data)
 
         axios.put(`${baseUrlApi}profile/`, data)
         .then(res => {
-            // console.log('res', res)
             
             // reShow
             setShowHeight(true)
@@ -185,9 +155,15 @@ const Profile = () => {
             setShowDistrict(true)
             setShowProvince(true)
             setShowPostcode(true)
+
+            setBaseFirstName(firstName)
+            setBaseLastName(lastName)
+            setBaseAddress(address)
+            setBaseSubdistrict(subdistrict)
+            setBaseDistrict(district)
+            setBaseProvince(province)
+            setBasePostcode(postcode)
         })
-
-
     }
 
     useEffect(() => {
@@ -198,7 +174,6 @@ const Profile = () => {
             setEmail(res.data[0].username)
             setFirstName(res.data[0].first_name)
             setLastName(res.data[0].last_name)
-            // console.log(res.data[0].date_of_birth)
             setBD(res.data[0].date_of_birth)
             setAddress(res.data[0].address)
             setSubdistrict(res.data[0].sub_district)
@@ -225,10 +200,10 @@ const Profile = () => {
             {/* Header */}
             <Grid container direction="row" justifyContent="flex-start" alignItems="flex-end" style={{ paddingBottom: "20px" }}>
                 {
-                    accessType === '0' ?
+                    accesstype === '0' ?
                     <Grid item xs={1}>
                     <IconButton
-                        onClick={() => { navigate("/dashboard", { state: { accessType: accessType }}) }}
+                        onClick={() => { navigate("/dashboard", { state: { type: accesstype}}) }}
                         edge="end"
                         >
                         <ArrowBackIcon fontSize="large"/>
@@ -240,7 +215,7 @@ const Profile = () => {
                         <Typography variant="h2" component="span"> Profile</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                        <Typography variant="subtitle1" component="span" style={{ fontFamily: "Noto Sans Thai, Roboto, sans-serif" }}>ประเภทผู้ใช้งาน {accessType === '0' ? 'แพทย์' :'ผู้ป่วย'} </Typography>
+                        <Typography variant="subtitle1" component="span" style={{ fontFamily: "Noto Sans Thai, Roboto, sans-serif" }}>ประเภทผู้ใช้งาน {accesstype === '0' ? 'แพทย์' :'ผู้ป่วย'} </Typography>
                         <Logout></Logout>
                     </Grid>
                     <Divider variant="fullWidth" style={{ padding: "10px 0" }}/>
