@@ -70,7 +70,7 @@ const Login = () => {
             {/* Header */}
             <Grid container direction="row" justifyContent="center" alignItems="center" style={{ paddingBottom: "20px" }}>
                 <Grid item xs>
-                    <Typography variant="h2" component="h6">Login</Typography>
+                    <Typography variant="h2" component="h6">{fetchToken() ? 'Logged': 'Login'}</Typography>
                     <Divider variant="fullWidth" style={{ padding: "10px 0" }}/>
                 </Grid>
             </Grid>
@@ -82,8 +82,7 @@ const Login = () => {
 
                 {
                     fetchToken() ? (
-                        <Grid item xs={6} container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle1" component="h3" style={{ textTransform: 'uppercase' }}>logged</Typography>
+                        <Grid item xs={6}>
                             <Logout></Logout>
                         </Grid>
                     ) : (

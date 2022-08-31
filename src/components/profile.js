@@ -317,7 +317,7 @@ const Profile = () => {
                     {/* button */}
                     <Stack direction="row" spacing={2} style={{ paddingTop: "15px", visibility: handleEditHidden('0') }}>
                         <Button variant="contained" size="large" fullWidth onClick={handleSubmit} onMouseDown={handleMouseDown}>Update</Button>
-                        <Button variant="outlined" size="large" fullWidth onClick={() => navigate("/dashboard")}>Cancel</Button>
+                        <Button variant="outlined" size="large" fullWidth onClick={() => navigate("/dashboard", { state: { type: accesstype}})}>Cancel</Button>
                     </Stack>
 
 

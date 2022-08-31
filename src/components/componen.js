@@ -24,7 +24,7 @@ export const Logout = () => {
     return (
         <>
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-                <Button variant="contained" color="error" onClick={handleLogout}>sign out</Button>
+                <Button variant="contained" color="error" onClick={handleLogout}>Log out</Button>
             </Stack>
         </>
     )
